@@ -43,16 +43,35 @@ export PATH=$PATH:$GOBIN:$GOPKG:$GOPATH/bin:/go/src/k8s.io/kubernetes/_output/lo
 
 ## kubernetes V1.12源码编译
 ---
-我们部署好golang环境后，就可以从github上拉取kubernetes源码，进行编译了。github上kubernetes主页通过下面的命令对源码进行拉去并自动编译。
+我们部署好golang环境后，就可以从github上拉取kubernetes源码，进行编译了。github上kubernetes主页通过下面的命令对源码进行拉取并自动编译。
 > 
 ```
 $ go get -d k8s.io/kubernetes
 $ cd $GOPATH/src/k8s.io/kubernetes
 $ make
 ```
-但是我在我本地环境执行上述命令 `go get -d k8s.io/kubernetes`就卡住不像下走了，后来通过查错发现是代码通过上面的地址不能拉取，因此我改用手动的办法，下面介绍详细步骤。
+但是我在我本地环境执行上述命令 `go get -d k8s.io/kubernetes`就卡住不动了，后来通过查错发现是代码通过上面的命令并不能拉取到代码，因此我改用手动的办法，下面介绍详细步骤。
 
 ### 步骤
+1. 在 `$GOPATH` 路径下新建源码文件夹，代码如下：
+
+`mkdir -p $GOPATH/src/k8s.io`
+
+`cd $GOPATH/src/k8s.io`
+
+`git clone -b release-1.12 https://github.com/kubernetes/kubernetes.git`
+
+`cd $GOPATH/src/k8s.io/kubernetes`
+
+`make`
+
+2. 此时我们稍等片刻，make会自动去拉取安装过程中需要的一些golang包，其中可能部分包不能拉取到，我们需要去网上找到相应缺少的包，并且导入到报错提示的路径下面，然后再次执行 `make` 指令。
+
+3. 执行成功后，生成的可执行文件会在下面文件夹自动生成：
+
+`cd $GOPATH/src/k8s.io/kubernetes/_output/local/bin/linux/amd64`
+
+4. 最后将kubernetes的amd64目录下面所有编译之后的代码全部复制出来，最后进行安装。
 
 
 
