@@ -55,16 +55,18 @@ $ make
 ### 步骤
 1. 在 `$GOPATH` 路径下新建源码文件夹，代码如下：
 
-`mkdir -p $GOPATH/src/k8s.io`
+>
+```
+mkdir -p $GOPATH/src/k8s.io
 
-`cd $GOPATH/src/k8s.io`
+cd $GOPATH/src/k8s.io
 
-`git clone -b release-1.12 https://github.com/kubernetes/kubernetes.git`
+git clone -b release-1.12 https://github.com/kubernetes/kubernetes.git
 
-`cd $GOPATH/src/k8s.io/kubernetes`
+cd $GOPATH/src/k8s.io/kubernetes
 
-`make`
-
+make
+```
 2. 此时我们稍等片刻，make会自动去拉取安装过程中需要的一些golang包，其中可能部分包不能拉取到，我们需要去网上找到相应缺少的包，并且导入到报错提示的路径下面，然后再次执行 `make` 指令。
 
 3. 执行成功后，生成的可执行文件会在下面文件夹自动生成：
