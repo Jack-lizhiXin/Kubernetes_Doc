@@ -71,7 +71,7 @@ make
 
 3. 执行成功后，生成的可执行文件会在下面文件夹自动生成：
 
-`cd $GOPATH/src/k8s.io/kubernetes/_output/local/bin/linux/amd64`
+> `cd $GOPATH/src/k8s.io/kubernetes/_output/local/bin/linux/amd64`
 
 4. 最后将kubernetes的amd64目录下面所有编译之后的代码全部复制出来，最后进行安装。
 
