@@ -41,6 +41,20 @@ export PATH=$PATH:$GOBIN:$GOPKG:$GOPATH/bin:/go/src/k8s.io/kubernetes/_output/lo
 ```
 3. 此时golang的环境就部署完成了，我们可以执行 `go version` 命令查看。golang的工作目录是：`/go/`
 
+## kubernetes V1.12源码编译
+---
+我们部署好golang环境后，就可以从github上拉取kubernetes源码，进行编译了。github上kubernetes主页通过下面的命令对源码进行拉去并自动编译。
+> 
+```
+$ go get -d k8s.io/kubernetes
+$ cd $GOPATH/src/k8s.io/kubernetes
+$ make
+```
+但是我在我本地环境执行上述命令 `go get -d k8s.io/kubernetes`就卡住不像下走了，后来通过查错发现是代码通过上面的地址不能拉取，因此我改用手动的办法，下面介绍详细步骤。
+
+### 步骤
+
+
 
 
 
