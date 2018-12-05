@@ -39,6 +39,9 @@ export GOOS=linux
 export GOPATH=/go
 export PATH=$PATH:$GOBIN:$GOPKG:$GOPATH/bin:/go/src/k8s.io/kubernetes/_output/local/go/bin/
 ```
+   
+      
+         3.执行命令`source /root/.bash_profile`
 3. 此时golang的环境就部署完成了，我们可以执行 `go version` 命令查看。golang的工作目录是：`/go/`
 
 ## kubernetes V1.12源码编译
