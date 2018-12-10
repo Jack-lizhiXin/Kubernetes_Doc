@@ -20,7 +20,22 @@ go install
 ```
 
 3. virtual-kubelet的可执行文件就会出现在`$GOPATH/bin/`当中
-4. 启动VK
+4. VK需要读取一些环境变量，用来注册自己到现有kubernetes集群中，因此我们需要设置一些环境变量，我们可以把需要的环境变量，写入一个脚本中，每次需要启动VK之前可以执行一下这个脚本，初始化环境变量，在脚本中写入如下内容.
+   
+   4.1 `vi vk.sh` #写入内容如下
+   
+   4.2 source vk.sh
+
+```
+source ~/admin-openrc.sh    #openstack权限验证文件 可以通过dashboard生成
+export OS_DOMAIN_NAME="default"
+export KUBERNETES_SERVICE_HOST=XX.XX.XX.XX  #kubernetes master IP
+export KUBERNETES_SERVICE_PORT=6443
+export KUBELET_PORT=10250
+$GOPATH/bin/virtual-kubelet --provider openstack    #启动命令
+```
+
+5. 启动VK
 
 >
 ```
