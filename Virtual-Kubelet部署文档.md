@@ -20,7 +20,7 @@ go install
 ```
 
 3. virtual-kubelet的可执行文件就会出现在`$GOPATH/bin/`当中
-4. VK需要读取一些环境变量，用来注册自己到现有kubernetes集群中，因此我们需要设置一些环境变量，我们可以把需要的环境变量，写入一个脚本中，每次需要启动VK之前可以执行一下这个脚本，初始化环境变量，在脚本中写入如下内容.(注意：启动过程中，可能会提示缺少token和ca.crt文件，这两个文件VK节点是注册到kubernetes集群中需要的权限验证的两个文件，用户需要自己创建（如果安装了kubernetes dashboard 也可以用其保密字典，例如：
+4. VK需要读取一些环境变量，用来注册自己到现有kubernetes集群中，因此我们需要设置一些环境变量，我们可以把需要的环境变量，写入一个脚本中，每次需要启动VK之前可以执行一下这个脚本，初始化环境变量，在脚本中写入如下内容.(注意：启动过程中，可能会提示缺少token和ca.crt文件，这两个文件是VK节点注册到kubernetes集群中需要的权限验证的两个文件，用户需要自己创建（如果安装了kubernetes dashboard 也可以用其保密字典，例如：
 kubernetes-dashboard-admin-token-q7f2n）)
    
    4.1 `vi vk.sh` #写入内容如下
