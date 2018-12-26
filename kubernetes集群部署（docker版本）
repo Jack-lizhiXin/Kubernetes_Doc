@@ -14,27 +14,10 @@ sudo yum -y install docker-ce
 # Step 4: 开启Docker服务
 sudo service docker start
 
-# 注意：
-# 官方软件源默认启用了最新的软件，您可以通过编辑软件源的方式获取各个版本的软件包。例如官方并没有将测试版本的软件源置为可用，你可以通过以下方式开启。同理可以开启各种测试版本等。
-# vim /etc/yum.repos.d/docker-ce.repo
-#   将 [docker-ce-test] 下方的 enabled=0 修改为 enabled=1
-#
-# 安装指定版本的Docker-CE:
-# Step 1: 查找Docker-CE的版本:
-# yum list docker-ce.x86_64 --showduplicates | sort -r
-#   Loading mirror speeds from cached hostfile
-#   Loaded plugins: branch, fastestmirror, langpacks
-#   docker-ce.x86_64            17.03.1.ce-1.el7.centos            docker-ce-stable
-#   docker-ce.x86_64            17.03.1.ce-1.el7.centos            @docker-ce-stable
-#   docker-ce.x86_64            17.03.0.ce-1.el7.centos            docker-ce-stable
-#   Available Packages
-# Step2 : 安装指定版本的Docker-CE: (VERSION 例如上面的 17.03.0.ce.1-1.el7.centos)
-# sudo yum -y install docker-ce-[VERSION]
-
-安装docker后校验
+#安装docker后校验
 docker version
 
-配置镜像加速器：
+#配置镜像加速器：
 sudo mkdir -p /etc/docker
 sudo tee /etc/docker/daemon.json <<-'EOF'
 {
@@ -45,7 +28,7 @@ sudo systemctl daemon-reload
 sudo systemctl restart docker
 
 
-2.由于安装kubernetes组件时 很多组件都是外网 所以这里可以替换安装源为国内源（备注命令 停止yum进程 # rm -rf /var/run/yum.pid）
+2.由于安装kubernetes组件时 很多组件都是打包成docker镜像的 而且这些镜像都在外网 所以这里可以替换docker安装源为国内源 执行下面的命令：
 cat <<EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
@@ -69,7 +52,7 @@ systemctl disable firewalld
 5.关闭selinux
 vim /etc/selinux/config
 #设置SELINUX=disabled
-然后分别执行
+然后依次执行下面的命令：
 setenforce 0
 
 cat <<EOF >  /etc/sysctl.d/k8s.conf
@@ -83,29 +66,28 @@ sysctl --system
 6.执行安装命令
 yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 
-rm -rf /var/run/yum.pid
-
 7.初始化启动
-执行初始化命令之前 请阅读下方的两点注意事项 一定要阅读：
-kubeadm init --kubernetes-version=v1.12.1 --pod-network-cidr=10.244.0.0/16
+执行初始化命令之前 请阅读下方的两点注意事项 请一定要阅读：
+kubeadm init --kubernetes-version=v1.12.2 --pod-network-cidr=10.244.0.0/16
 
-#特别注意1：--kubernetes-version=v1.12.1 参数时kubernetes的版本号 由于版本库里面的版本时刻在更新 因此这里如果v1.12.1版本找不到或者过时 
+#特别注意1：--kubernetes-version=v1.12.2 参数是kubernetes的版本号 由于版本库里面的版本时刻在更新 因此这里如果v1.12.2版本找不到或者过时 
 系统错误提示会告知当前最新的版本 只要把参数替换为最新版本即可
 
-##特别注意2：执行上述指令后 kubeadm会去拉去必须的kubernetes组件镜像 由于镜像在国外 这一步很可能会出错（出错提示会告知所需要的镜像和版本） 
-解决的办法是提前从国内镜像库中把它需要的组件的镜像提前下载到本地 还需要注意组件的镜像版本 例如我本次安装的kubernetes版本是v1.12.1 它所需要的组件及其版本如下所示：
-k8s.gcr.io/kube-apiserver:v1.12.1
-k8s.gcr.io/kube-controller-manager:v1.12.1
-k8s.gcr.io/kube-scheduler:v1.12.1
-k8s.gcr.io/kube-proxy:v1.12.1
+##特别注意2：执行上述指令后 kubeadm会去镜像仓库拉取必须的kubernetes组件镜像 由于镜像在国外 这一步很可能会出错（出错提示会告知所需要的镜像和版本） 
+解决的办法是提前从国内镜像库中把它需要的组件的镜像提前下载到本地 还需要注意组件的镜像版本 例如我本次安装的kubernetes版本是v1.12.2 它所需要的组件及其版本如下所示：
+k8s.gcr.io/kube-apiserver:v1.12.2
+k8s.gcr.io/kube-controller-manager:v1.12.2
+k8s.gcr.io/kube-scheduler:v1.12.2
+k8s.gcr.io/kube-proxy:v1.12.2
 k8s.gcr.io/pause:3.1
 k8s.gcr.io/etcd:3.2.24
 k8s.gcr.io/coredns:1.2.2
 这里给大家推荐一个国内的dockerhub仓库 url：https://hub.docker.com/u/mirrorgooglecontainers/
 这个账户下面的kubernetes组件镜像非常全面 可以先将对应版本镜像使用docker pull命令拉到自己本地后 再用docker tag命令 将镜像打标签改为kubeadm要求的镜像版本 
 例如：
-docker tag mirrorgooglecontainers/kube-apiserver-amd64:v1.12.1 k8s.gcr.io/kube-apiserver:v1.12.1
-准备好上面的组件后：我们就可以开始执行上述初始化命令了
+docker pull mirrorgooglecontainers/kube-apiserver-amd64:v1.12.2
+docker tag mirrorgooglecontainers/kube-apiserver-amd64:v1.12.2 k8s.gcr.io/kube-apiserver:v1.12.2
+准备好上面提到的所有组件后：我们就可以开始执行上述的初始化命令了
 
 初始化成功后还需要接着执行下面的命令：
 
