@@ -14,7 +14,7 @@
 2. 把vk的源代码代码从github上clone下来，然后放到这个目录下
 ```
 cd $GOPATH/src/github.com/virtual-kubelet/
-git clone https://github.com/kevin-zhaoshuai/virtual-kubelet.git
+git clone https://github.com/CodePoetX/virtual-kubelet.git
 cd $GOPATH/src/github.com/virtual-kubelet/virtual-kubelet/
 go install
 ```
