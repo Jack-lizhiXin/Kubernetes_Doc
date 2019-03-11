@@ -111,3 +111,8 @@ kubectl apply -f kube-flannel.yml
 kubectl get nodes
 或者
 kubectl get pods --all-namespaces
+
+
+
+问题汇总与解决办法：
+https://github.com/kubernetes/kubernetes/issues/44665
