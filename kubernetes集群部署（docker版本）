@@ -68,7 +68,7 @@ yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 
 7.初始化启动
 执行初始化命令之前 请阅读下方的两点注意事项 请一定要阅读：
-kubeadm init --kubernetes-version=v1.12.2 --pod-network-cidr=10.244.0.0/16
+kubeadm init --pod-network-cidr=10.244.0.0/16
 
 #特别注意1：--kubernetes-version=v1.12.2 参数是kubernetes的版本号 由于版本库里面的版本时刻在更新 因此这里如果v1.12.2版本找不到或者过时 
 系统错误提示会告知当前最新的版本 只要把参数替换为最新版本即可
