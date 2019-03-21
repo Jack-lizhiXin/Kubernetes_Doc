@@ -1,4 +1,7 @@
 # Virtual Kubelet部署文档（Zun版本）
+## virtual kubelet项目源码Github地址（Provider OpenStack Zun container）
+[Virtual Kubelet项目Github](https://github.com/Jack-lizhiXin/virtual-kubelet)
+
 ## Golang环境部署
 由于Virtual Kubelet是golang开发的，因此我们要通过源码部署VK（Virtual Kubelet），首先必须现在服务器上安装go语言环境。golang环境的部署安装我在同目录下面的文档有介绍，这里不在详述。
 
