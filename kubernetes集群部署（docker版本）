@@ -68,7 +68,7 @@ yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 
 7.初始化启动
 执行初始化命令之前 请阅读下方的两点注意事项 请一定要阅读：
-kubeadm init --pod-network-cidr=10.244.0.0/16
+kubeadm init --pod-network-cidr=192.168.0.0/16
 
 #特别注意1：--kubernetes-version=v1.12.2 参数是kubernetes的版本号 由于版本库里面的版本时刻在更新 因此这里如果v1.12.2版本找不到或者过时 
 系统错误提示会告知当前最新的版本 只要把参数替换为最新版本即可
@@ -94,18 +94,29 @@ docker tag mirrorgooglecontainers/kube-apiserver-amd64:v1.12.2 k8s.gcr.io/kube-a
 export KUBECONFIG=/etc/kubernetes/admin.conf
 echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> ~/.bash_profile
 
-docker之间需要相互通信还需要部署一下容器之间互通的网络：
-拉取配置网络的文件，拉取下来打开看看，其中最关键的是Image参数，也就是启动容器时候的镜像，一般是你本地没有的，也需要去dockerhub上拉取下来
-wget https://raw.githubusercontent.com/coreos/flannel/v0.9.1/Documentation/kube-flannel.yml
+docker之间需要相互通信还需要部署一下容器之间互通的网络，执行下面的指令即可：
+kubectl apply -f https://docs.projectcalico.org/v3.8/manifests/calico.yaml
 
-docker pull rancher/coreos-flannel:v0.10.0
+等待片刻 Kubernetes Master节点就部署好了。
+成功后系统会返回如下状态信息：
+Your Kubernetes control-plane has initialized successfully!
 
-#注意打标签的时候 最后这个名字要和上方wget下来的文件中的image后面的参数相同，由于这里可能有版本更新，可能需要调整
-docker tag rancher/coreos-flannel:v0.10.0 quay.io/coreos/flannel:v0.10.0-amd64
+To start using your cluster, you need to run the following as a regular user:
 
-然后接着在同目录下面执行
-kubectl apply -f kube-flannel.yml
-等待片刻 以后系统就部署好了 
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  /docs/concepts/cluster-administration/addons/
+
+You can now join any number of machines by running the following on each node
+as root:
+
+  kubeadm join <control-plane-host>:<control-plane-port> --token <token> --discovery-token-ca-cert-hash sha256:<hash>
+
+注意查看最后一条信息，如何将工作节点加入集群中，直接在工作节点执行最后系统返回的这条指令即可。注意k8s工作节点也要执行如上教程的1至7步操作，执行完成后，在执行添加节点指令即可。
 
 可以使用命令查看集群状态：
 kubectl get nodes
